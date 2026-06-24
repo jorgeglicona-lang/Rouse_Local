@@ -1,7 +1,9 @@
-from pydantic import BaseModel
 from typing import Optional
+from pydantic import BaseModel
+
 
 class ChatRequest(BaseModel):
     message: str
-    mode: Optional[str] = "general"  # Puede ser "general" o "coding"
-    model: Optional[str] = None      # Opcional, por si se quiere forzar un modelo exacto
+    session_id: str
+    model: Optional[str] = None
+    mode: Optional[str] = "general"

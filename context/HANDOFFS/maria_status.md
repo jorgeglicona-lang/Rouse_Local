@@ -1,7 +1,7 @@
 # HANDOFF - Estado actual de Rouse Local
 
 ## Resumen
-Rouse Local ya tiene backend funcional con FastAPI y conexión real a Ollama. El sistema ya responde desde el endpoint `/chat` usando modelos locales.
+Rouse Local ya tiene backend funcional con FastAPI, conexión real a Ollama y la base inicial de persistencia con SQLite.
 
 ## Estado actual confirmado
 - Proyecto: Rouse Local
@@ -9,7 +9,6 @@ Rouse Local ya tiene backend funcional con FastAPI y conexión real a Ollama. El
 - Backend: FastAPI
 - Entorno virtual configurado
 - Repositorio Git inicializado
-- Estructura base del proyecto establecida
 - Endpoint `/health` funcionando
 - Endpoint `/chat` funcionando
 - Ollama instalado y probado
@@ -19,13 +18,23 @@ Rouse Local ya tiene backend funcional con FastAPI y conexión real a Ollama. El
 - `qwen2.5-coder:7b`
 - `llama3:8b`
 
-## Estado técnico actual
-El flujo actual de `/chat` ya manda mensajes a Ollama y devuelve respuesta del modelo.
-Todavía no hay:
-- prompt de sistema/personalidad de Rouse
-- selector formal de modo general vs coding
-- memoria persistente
-- separación clara entre configuración, prompt y comportamiento
+---
+
+# Semana 2 - progreso actual
+
+## Ya implementado
+### Persistencia base con SQLite
+Se agregó `app/db/` con:
+
+- `database.py`
+- `models.py`
+- `crud.py`
+
+### Base de datos física
+La base ya no es temporal.  
+Existe archivo físico en:
+
+data/db/rouse.db
 
 ## Tareas de María - Día 3
 ### Objetivo general
