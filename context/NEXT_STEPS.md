@@ -1,7 +1,26 @@
-# NEXT_STEPS (Semana 2 - Memoria y Persistencia)
+# NEXT_STEPS
 
-1. Diseñar el esquema de la base de datos en SQLite (tablas `conversations` y `messages`).
-2. Configurar la conexión a la base de datos en `app/data/`.
-3. Modificar `/chat` para que reciba un `session_id` y guarde el historial del usuario.
-4. Lograr que `llm_service.py` recupere los últimos N mensajes de la base de datos antes de enviar el prompt a Ollama.
-5. Preparar una interfaz web mínima tipo chat (HTML/JS) para dejar de usar Swagger UI.
+## Siguiente bloque recomendado
+1. Crear interfaz web mínima tipo chat.
+2. Servir esa interfaz desde FastAPI.
+3. Permitir:
+   - escribir mensajes
+   - usar `session_id`
+   - elegir modo general/coding
+   - mostrar historial visual básico
+
+## Después de la interfaz
+4. Crear tabla `memories`.
+5. Implementar CRUD de memoria simple.
+6. Definir qué datos deben persistir más allá del historial corto:
+   - nombre del usuario
+   - preferencias
+   - proyectos activos
+   - notas importantes de contexto
+
+## No hacer todavía
+- RAG
+- embeddings
+- memoria semántica compleja
+- sincronización móvil
+- interfaz final bonita

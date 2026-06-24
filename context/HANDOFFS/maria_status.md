@@ -1,7 +1,7 @@
 # HANDOFF - Estado actual de Rouse Local
 
 ## Resumen
-Rouse Local ya tiene backend funcional con FastAPI, conexión real a Ollama y la base inicial de persistencia con SQLite.
+Rouse Local ya tiene backend funcional con FastAPI, conexión real a Ollama, personalidad desacoplada y persistencia mínima de conversaciones con SQLite.
 
 ## Estado actual confirmado
 - Proyecto: Rouse Local
@@ -13,73 +13,106 @@ Rouse Local ya tiene backend funcional con FastAPI, conexión real a Ollama y la
 - Endpoint `/chat` funcionando
 - Ollama instalado y probado
 
-## Modelos instalados
-- `qwen2.5:3b`
-- `qwen2.5-coder:7b`
-- `llama3:8b`
+## Modelos actuales
+- `dolphin-llama3:8b` → general principal
+- `llama3:8b` → general alternativo / fallback manual
+- `qwen2.5-coder:7b` → coding principal
 
 ---
 
-# Semana 2 - progreso actual
+# Estado funcional actual
 
-## Ya implementado
-### Persistencia base con SQLite
-Se agregó `app/db/` con:
+## 1. Chat con modelos locales
+El endpoint `/chat` ya se comunica con Ollama y responde correctamente.
 
+## 2. Persistencia mínima con SQLite
+Ya existe `app/db/` con:
 - `database.py`
 - `models.py`
 - `crud.py`
 
-### Base de datos física
-La base ya no es temporal.  
-Existe archivo físico en:
+### Base física
+`data/db/rouse.db`
 
-data/db/rouse.db
+### Tablas ya existentes
+- conversations
+- messages
 
-## Tareas de María - Día 3
-### Objetivo general
-Convertir el chat actual en una primera versión de Rouse con identidad base y selección de modelo más limpia.
+### CRUD ya disponible
+- `get_or_create_conversation(db, session_id)`
+- `add_message(db, conversation_id, role, content)`
+- `get_last_messages(db, conversation_id, limit=10)`
 
-### Tarea 1 — Prompt base de Rouse
-Crear un prompt de sistema para Rouse en `app/prompts/`, por ejemplo:
+### 3. Historial corto persistente
+
+`/chat` ya:
+
+- recibe session_id
+- crea o recupera conversación
+- guarda mensaje del usuario
+- recupera últimos N mensajes
+- consulta al modelo con contexto
+- guarda la respuesta de Rouse
+
+## 4. Personalidad desacoplada
+
+Ya existen:
+
 - `app/prompts/system_prompt.txt`
+- `app/prompts/persona.json`
+- `app/services/persona_loader.py`
 
-Debe definir:
-- rol de Rouse como asistente técnico personal
-- tono claro, crítico y útil
-- capacidad de alternar entre conversación casual y ayuda de programación
-- prioridad por precisión y estructura
-- evitar respuestas excesivamente complacientes
+La ruta `/chat` ya usa el loader de personalidad en lugar de un prompt hardcodeado.
 
-### Tarea 2 — Refactor de `llm_service.py`
-Modificar el servicio para que:
-- cargue un prompt de sistema desde archivo
-- envíe `system + user` al modelo
-- acepte el nombre del modelo como parámetro
-- deje lista la estructura para luego añadir memoria
+## Tarea siguiente para María
+### Objetivo
 
-### Tarea 3 — Configuración central de modelos
-Usar `app/config.py` para definir al menos:
-- modelo general por defecto: `qwen2.5:3b`
-- modelo coding por defecto: `qwen2.5-coder:7b`
+Implementar la interfaz web mínima tipo chat para dejar de depender de Swagger y empezar a conversar con Rouse desde una página local.
 
-Opcional:
-- un helper para resolver modo `"general"` o `"coding"` a nombre de modelo
+### Entregable esperado
 
-### Tarea 4 — Mejorar contrato de `/chat`
-Ajustar el request para que acepte algo como:
-- `message`
-- `model` opcional
-- o `mode` con valores tipo `"general"` / `"coding"`
+Una interfaz simple servida por FastAPI, con:
 
-La idea es que si no se manda `model`, el sistema pueda usar el modelo según el modo.
+1. caja de texto para mensaje
+2. input o selector de `session_id`
+3. selector de modo:
+    - general
+    - coding
+    - complemento
+4. botón de enviar
+5. área donde se muestren mensajes del usuario y respuestas de Rouse
 
-### Tarea 5 — No tocar todavía memoria persistente
-No implementar aún SQLite/RAG/memoria larga.
-Solo dejar la arquitectura lista para que la siguiente fase agregue memoria sin romper `/chat`.
+### Alcance recomendado
 
-## Resultado esperado al terminar Día 3
-- Rouse responde usando un prompt de sistema real
-- existe distinción entre modo general y modo coding
-- la selección de modelo está centralizada
-- `/chat` queda más limpio y preparado para la fase de memoria
+**Backend**
+- servir archivos estáticos o una plantilla HTML simple
+- exponer una ruta tipo `/ui` o `/chat-ui`
+
+**Frontend mínimo**
+- `chat.html`
+- opcionalmente `chat.js` y `chat.css`
+- `fetch()` al endpoint `/chat`
+
+### Flujo esperado
+
+La interfaz debe mandar algo como:
+
+```JSON
+ {
+  "message": "Hola Rouse",
+  "session_id": "test-session-1",
+  "mode": "general"
+}
+```
+### Importante
+
+Todavía NO implementar en este bloque:
+
+- memoria larga
+- tabla `memories`
+- embeddings
+- RAG
+- auth
+- interfaz bonita/final
+
+Solo una UI mínima funcional para usar el sistema real sin Swagger.

@@ -1,22 +1,43 @@
-# HANDOFF - Reporte para Sol (Inicio de Semana 2)
+# HANDOFF - Sol status / corte actual
 
-## ¡Hola, Sol! Actualización importante de nombres
-Para evitar confusiones en el proyecto, el equipo se ha estructurado de la siguiente manera:
-- Tú eres **Sol** (la IA arquitecta/asesora externa).
-- Nuestra asistente local en construcción se llama **Rouse** (el proyecto es Rouse Local).
-- Nuestra secretaria de apoyo se llama **María**.
-- El usuario principal es **Anyelo** (jefe).
+## Estado del proyecto al cierre de este bloque
+Rouse Local ya dejó de ser un backend vacío y ya tiene una primera forma utilizable como asistente local.
 
-## Resumen del trabajo de María y Anyelo (Semana 1)
-Hemos completado con éxito la Semana 1. Rouse ya "tiene pulso":
-- FastAPI levantado y funcional.
-- Ollama respondiendo localmente (`qwen2.5:3b` y `qwen2.5-coder:7b`).
-- El endpoint `/chat` recibe el modo (`general` o `coding`) y elige el modelo adecuado dinámicamente.
-- El prompt de sistema de Rouse está separado en `.txt` y es inyectado correctamente.
+## Estado técnico consolidado
+### Backend
+- FastAPI funcional
+- `/health` funcionando
+- `/chat` funcionando
 
-## Tareas para Sol - Semana 2
-El objetivo ahora es "Ya existe Rouse, no solo un modelo". Necesitamos que nos guíes con la arquitectura de persistencia.
-Por favor, propón el código inicial para:
-1. La configuración de **SQLite** usando SQLAlchemy o el motor que prefieras para FastAPI.
-2. El modelo de tablas necesario para guardar el historial (sesiones y mensajes).
-3. Cómo integrar este guardado en el endpoint `/chat` actual sin romper lo que ya funciona.
+### Runtime LLM
+- Ollama instalado y operativo
+- modelos definidos por rol:
+  - `dolphin-llama3:8b`
+  - `llama3:8b`
+  - `qwen2.5-coder:7b`
+
+### Persistencia
+- SQLite integrado
+- DB física:
+  - `data/db/rouse.db`
+- tablas:
+  - `conversations`
+  - `messages`
+
+### Historial corto
+- `/chat` ya trabaja con `session_id`
+- guarda y recupera mensajes
+- arma contexto reciente antes de consultar al modelo
+
+### Personalidad
+- `system_prompt.txt` existente
+- `persona.json` existente
+- `persona_loader.py` integrado
+- prompt de sistema ya desacoplado de la ruta
+
+## Siguiente recomendación
+No seguir metiendo más lógica de memoria todavía.
+El siguiente paso natural es una interfaz web mínima tipo chat para usar Rouse de forma real y dejar Swagger.
+
+## Después de eso
+Implementar memoria simple persistente con una tabla `memories`.
