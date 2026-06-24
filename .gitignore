@@ -1,0 +1,96 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Entorno virtual
+.venv/
+venv/
+env/
+
+# Distribución / builds
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# =========================
+# Variables de entorno
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# VS Code / IDE / SO
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# =========================
+# Logs
+# =========================
+*.log
+logs/
+uvicorn.log
+
+# =========================
+# Base de datos / runtime
+# =========================
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+
+# =========================
+# Cachés del proyecto
+# =========================
+data/db/*
+!data/db/.gitkeep
+
+data/memory/*
+!data/memory/.gitkeep
+
+data/projects/*
+!data/projects/.gitkeep
+
+# Si luego agregas un vector store local, descomenta esto:
+# data/vector/*
+# !data/vector/.gitkeep
+
+# =========================
+# Tests / coverage
+# =========================
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# =========================
+# Archivos temporales
+# =========================
+*.tmp
+*.temp
+*.bak
+
+# =========================
+# Jupyter (por si luego pruebas cosas)
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# Archivos sensibles del asistente
+# =========================
+system_prompt.txt
+# Si más adelante guardas memorias privadas exportadas o dumps,
+# puedes meterlas aquí o crear una carpeta dedicada ignorada.
+# ejemplo:
+# exports/
+# private/
